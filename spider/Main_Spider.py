@@ -128,26 +128,30 @@ def Videos_98():
         for i in bsobj.findAll('a',href = re.compile('/nbalx/')):
 
             if len(i.attrs) == 2 and i.strong is None:#筛选出最近一场比赛的URL链接，并且插入到数据库
-                if i.string!=Videos98:
-                    Videos98=i.string
-                    #print(i.string,i['href'])
+                try:
+                    cur.execute("SELECT id FROM MainAPP_lx WHERE title = %s", (i.string))  # 获取获取的比赛的id，出错说明数据库不存在
+                    The_ID = cur.fetchone()[0]
+                except:
+
+                    # print(i.string,i['href'])
                     cur.execute("INSERT INTO MainAPP_lx (title,created_time) VALUES (%s,%s)",
-                                (i.string, datetime.datetime.now()))#将这场比赛插入到数据库当中
+                                (i.string, datetime.datetime.now()))  # 将这场比赛插入到数据库当中
                     cur.connection.commit()
-                    cur.execute("SELECT id FROM MainAPP_lx WHERE title = %s",(i.string))#获取刚刚插入的比赛的id
-                    The_ID=cur.fetchone()[0]
-                    #--------------------------------------------以下代码的作用是打开某场比赛的链接，看到这场比赛的每节比赛的链接
-                    h = urlopen('http://www.nba98.com'+i['href'])
-                    bs = BeautifulSoup(h,'lxml')
-                    for j in bs.findAll('a',href = re.compile('http')):
-                        if re.match('http://www.',j['href']):
+                    cur.execute("SELECT id FROM MainAPP_lx WHERE title = %s", (i.string))  # 获取刚刚插入的比赛的id
+                    The_ID = cur.fetchone()[0]
+                    # --------------------------------------------以下代码的作用是打开某场比赛的链接，看到这场比赛的每节比赛的链接
+                    h = urlopen('http://www.nba98.com' + i['href'])
+                    bs = BeautifulSoup(h, 'lxml')
+                    for j in bs.findAll('a', href=re.compile('http')):
+                        if re.match('http://www.', j['href']):
                             continue
                         else:
-                            cur.execute("INSERT INTO MainAPP_lx_part (title,url,Belong_id,created_time) VALUES (%s,%s,%s,%s)",
-                                        (j.string, j['href'],The_ID,datetime.datetime.now()))  # 将这场比赛的每节比赛插入到数据库当中
+                            cur.execute(
+                                "INSERT INTO MainAPP_lx_part (title,url,Belong_id,created_time) VALUES (%s,%s,%s,%s)",
+                                (j.string, j['href'], The_ID, datetime.datetime.now()))  # 将这场比赛的每节比赛插入到数据库当中
                             cur.connection.commit()
 
-                            #print(j.string,j['href'],The_ID)
+                            # print(j.string,j['href'],The_ID)
                 break
                 #---------------------------------------------
     except:
