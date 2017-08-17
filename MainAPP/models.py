@@ -47,9 +47,6 @@ class Lx(models.Model):#98录像
     title = models.CharField(max_length=100)
     created_time = models.DateTimeField(default=datetime.datetime.now, blank=True)
 
-class ID_Part(models.Model):
-    def __str__(self):
-        return self.title
 
 class Lx_Part(models.Model):
 

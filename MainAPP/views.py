@@ -3,7 +3,7 @@ from MainAPP.models import Videos, Board_News,Latest_News,Board_Videos,Lx,Lx_Par
 
 # Create your views here.
 def index(request):
-    B_N = Board_News.objects.all().order_by('created_time')
+    B_N = Board_News.objects.all().order_by('-created_time')
     News_list0 = B_N[:1]#轮播的第一张
     News_list1 = B_N[1:5]#轮播的后面几张
     News_list2 = Latest_News.objects.all().order_by('-created_time')[0:10]
