@@ -13,12 +13,14 @@
 						<div class="panel-heading">
 							<h4 class="panel-title">
 								<a data-toggle="collapse" data-parent="#accordion"
-								   href="#collapseOne">
-									{{key}}
+								   href="#{{ forloop.counter }}">
+
+											{{key}}
+
 								</a>
 							</h4>
 						</div>
-						<div id="collapseOne" class="panel-collapse collapse ">
+						<div id="{{ forloop.counter }}" class="panel-collapse collapse ">
 							<div class="panel-body">
 								<ul class="list-group">
 								{% for u in value %}
