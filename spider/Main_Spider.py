@@ -86,7 +86,7 @@ def NBA_Official_News():
 
     try:
         ht = urlopen(url)
-        bsobj = BeautifulSoup(ht, 'lxml')
+        bsobj = BeautifulSoup(ht, 'lxml',from_encoding='gb18030')
         print('ok')
         for i in bsobj.findAll('a', href=re.compile("http://china.nba.com/a/")):  # 获取Board
             if 'target' in i.attrs and len(i.attrs) == 2 and i.span is not None:
