@@ -9,7 +9,7 @@
           <div class="col-md-10">
             <div class="panel panel-danger">
               <div class="panel-heading">
-                <h3 class="panel-title" style="color:red;" align="center">赛况播报</h3>
+                <h3 class="panel-title" style="color:red;" align="center">直播入口</h3>
               </div>
 
                 <ul class="list-group">
@@ -109,7 +109,7 @@
                   {% for v in News_list1 %}
                     <div class="item">
                         <img src={{v.img_src}} width="100%" height="100%" alt="First slide" >
-                        <div class="carousel-caption"><a style="color:#ffffff;font-family:verdana;font-size:160%;" href={{v.url}}>{{v.title}}</a></div>
+                        <div class="carousel-caption"><a target="_blank" style="color:#ffffff;font-family:verdana;font-size:160%;" href={{v.url}}>{{v.title}}</a></div>
                     </div>
                   {% endfor %}
                 </div>
@@ -127,7 +127,7 @@
               <table class="table ">
                 <tbody>
                 {% for v in News_list2 %}
-                  <tr><td><span class="glyphicon glyphicon-link" aria-hidden="true"></span><a style="color:#000000;" href="{{v.url}}">  {{v.title}}</a></td></tr>
+                  <tr><td><span class="glyphicon glyphicon-link" aria-hidden="true"></span><a style="color:#000000;" target="_blank" href="{{v.url}}">  {{v.title}}</a></td></tr>
                 {%endfor%}
                 </tbody>
               </table>

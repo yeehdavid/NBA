@@ -30,7 +30,7 @@ class Latest_News(models.Model):#NBA官网最新新闻
     created_time = models.DateTimeField(default=datetime.datetime.now, blank=True)
     title = models.CharField(max_length=100)
     url = models.CharField(max_length=200, blank=True)
-    img_src = models.CharField(max_length=200, blank=True)
+
 
 class Board_News(models.Model):#NBA官网头条新闻
     def __str__(self):
@@ -46,6 +46,10 @@ class Lx(models.Model):#98录像
         return self.title
     title = models.CharField(max_length=100)
     created_time = models.DateTimeField(default=datetime.datetime.now, blank=True)
+
+class ID_Part(models.Model):
+    def __str__(self):
+        return self.title
 
 class Lx_Part(models.Model):
 
