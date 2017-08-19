@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index, name='index'),
     url(r'^videos/', views.videos, name='videos'),
+    url(r'^haiwai/', views.haiwai, name='haiwai'),
     url(r'^users/',include('users.urls')),
 
     url(r'^users/', include('django.contrib.auth.urls')),
