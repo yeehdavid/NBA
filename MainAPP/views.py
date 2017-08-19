@@ -13,7 +13,7 @@ def index(request):
 
 def videos(request):
     dic = collections.OrderedDict()
-    luxiang=Lx.objects.all().order_by('-created_time')[0:10]
+    luxiang=Lx.objects.all().order_by('created_time')[0:10]
     for l in luxiang:
         dic[l.title] = Lx_Part.objects.filter(Belong=l)
 

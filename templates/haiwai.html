@@ -1,10 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block main %}
+
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <ul id="myTab" class="nav nav-tabs ">
+            <li class="active">
+                <a href="#mtwitter" data-toggle="tab">
+                   twitter[手机版]
+                </a>
+            </li>
+            <li>
+                <a href="#ptwitter" data-toggle="tab">
+                  twitter[PC版]
+                </a>
+            </li>
+
+        </ul>
+
+        <div id="myTabContent" class="tab-content">
+
+            <div class="tab-pane fade in active" id="mtwitter">
+
+                <iframe src="https://www.dogger.top" width="430" height="590">
+
+                </iframe>
+
+            </div>
+
+            <div class="tab-pane fade " id="ptwitter">
+
+                <iframe src="https://www.doger.top" width="930" height="600">
+
+                </iframe>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+{% endblock main %}
