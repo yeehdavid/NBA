@@ -21,5 +21,14 @@ def videos(request):
     return render(request,'videos.html',context={'luxiang':dic})
 
 
-def haiwai(request):
-    return render(request, 'haiwai.html')
+def ins(request):
+    return render(request, 'haiwai/ins.html')
+
+def mt(request):
+    return render(request, 'haiwai/mt.html')
+
+def pt(request):
+    return render(request, 'haiwai/pt.html')
+
+def go(request):
+    return render(request, 'haiwai/go.html')

@@ -21,7 +21,12 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index, name='index'),
     url(r'^videos/', views.videos, name='videos'),
-    url(r'^haiwai/', views.haiwai, name='haiwai'),
+
+    url(r'^ins/', views.ins, name='ins'),
+    url(r'^mt/', views.mt, name='mt'),
+    url(r'^pt/', views.pt, name='pt'),
+    url(r'^go/', views.go, name='go'),
+
     url(r'^users/',include('users.urls')),
 
     url(r'^users/', include('django.contrib.auth.urls')),
