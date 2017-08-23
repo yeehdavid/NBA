@@ -42,7 +42,7 @@ def Hoop_Latest_News():
         ht = urlopen(url)
         bsobj = BeautifulSoup(ht.read(), 'lxml')
     except:
-        print('can`t get the hoop html')
+        print('cant get the hoop html')
 
     try:
 
@@ -62,7 +62,7 @@ def Hoop_Latest_News():
                     #此处代码将新闻主要信息存入数据库中
                     #print(i.attrs['href'],i.string)
                 except:
-                    print('can`t get hoop——new，it is a new ，i will insert into my table')
+                    print('can`t get hoop——new,it is a new ,i will insert into my table')
                     cur.execute("INSERT INTO MainAPP_hoop_latest_news (title,url,created_time) VALUES (%s,%s,%s)",
                                 (i.string, i.attrs['href'], datetime.datetime.now()))
                     cur.connection.commit()
@@ -87,7 +87,7 @@ def NBA_Official_News():
         ht = urlopen(url)
         bsobj = BeautifulSoup(ht, 'lxml')
     except:
-        print('can`t get the NBA offical html')
+        print('cant get the NBA offical html')
     try:
 
 
@@ -97,7 +97,7 @@ def NBA_Official_News():
                     cur.execute("SELECT id FROM MainAPP_board_news WHERE title = %s", (i.span.string))
                     The_ID = cur.fetchone()[0]
                 except:
-                    print('can`t get NBA`Board——new，it is a new，i will insert into my table')
+                    print('can`t get NBA`Board——new,it is a new,i will insert into my table')
                     cur.execute("INSERT INTO MainAPP_board_news (title,url,img_src,created_time) VALUES (%s,%s,%s,%s)",
                                 (i.span.string, i.attrs['href'], i.img.attrs['src'], datetime.datetime.now()))
                     cur.connection.commit()
@@ -110,7 +110,7 @@ def NBA_Official_News():
                     cur.execute("SELECT id FROM MainAPP_latest_news WHERE title = %s", (i.span.next_sibling.next_sibling.string))
                     The_ID = cur.fetchone()[0]
                 except:
-                    print('can`t get latest——new，it is a new，i will insert')
+                    print('can`t get latest——new,it is a new,i will insert')
                     cur.execute("INSERT INTO MainAPP_latest_news (title,url,created_time) VALUES (%s,%s,%s)",
                         (i.span.next_sibling.next_sibling.string, i.attrs['href'], datetime.datetime.now()))
                     cur.connection.commit()
@@ -118,7 +118,7 @@ def NBA_Official_News():
                 break
 
     except:
-        print('can`t caozuo shuju ')
+        print('cant caozuo shuju ')
 
 
 
@@ -134,7 +134,7 @@ def Videos_98():
 
     except:
 
-        print('can`t get 98nba html')
+        print('cant get 98nba html')
 
 
     try:
@@ -147,7 +147,7 @@ def Videos_98():
                     cur.execute("SELECT id FROM MainAPP_lx WHERE title = %s", (i.string))  # 获取获取的比赛的id，出错说明数据库不存在
                     The_ID = cur.fetchone()[0]
                 except:
-                    print('can`t get lx，it is a new，i will insert')
+                    print('can`t get lx ,it is a new ,i will insert')
                     # print(i.string,i['href'])
                     cur.execute("INSERT INTO MainAPP_lx (title,created_time) VALUES (%s,%s)",
                                 (i.string, datetime.datetime.now()))  # 将这场比赛插入到数据库当中
