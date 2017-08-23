@@ -42,7 +42,7 @@ def Hoop_Latest_News():
         ht = urlopen(url)
         bsobj = BeautifulSoup(ht.read(), 'lxml')
     except:
-        print('获取虎扑新闻页面失败')
+        print('can`t get the hoop html')
 
     try:
 
@@ -62,17 +62,17 @@ def Hoop_Latest_News():
                     #此处代码将新闻主要信息存入数据库中
                     #print(i.attrs['href'],i.string)
                 except:
-                    print('hoop——new获取失败，说明这条新闻是新的，以下执行插入操作')
+                    print('can`t get hoop——new，it is a new ，i will insert into my table')
                     cur.execute("INSERT INTO MainAPP_hoop_latest_news (title,url,created_time) VALUES (%s,%s,%s)",
                                 (i.string, i.attrs['href'], datetime.datetime.now()))
                     cur.connection.commit()
-                    print('插入成功')
+                    print('insert success')
                     #
                     #print(time.time())
                 #print('插入数据完毕：', datetime.datetime.now())
                 break
     except:
-        print('虎扑新闻的数据操作失败')
+        print('hoop_latest_news caozuo shibai')
 
 
 
@@ -87,7 +87,7 @@ def NBA_Official_News():
         ht = urlopen(url)
         bsobj = BeautifulSoup(ht, 'lxml')
     except:
-        print('获取NBA官方新闻页面失败')
+        print('can`t get the NBA offical html')
     try:
 
 
@@ -97,11 +97,11 @@ def NBA_Official_News():
                     cur.execute("SELECT id FROM MainAPP_board_news WHERE title = %s", (i.span.string))
                     The_ID = cur.fetchone()[0]
                 except:
-                    print('Board——new获取失败，说明这条新闻是新的，以下执行插入操作')
+                    print('can`t get NBA`Board——new，it is a new，i will insert into my table')
                     cur.execute("INSERT INTO MainAPP_board_news (title,url,img_src,created_time) VALUES (%s,%s,%s,%s)",
                                 (i.span.string, i.attrs['href'], i.img.attrs['src'], datetime.datetime.now()))
                     cur.connection.commit()
-                    print('插入成功')
+                    print('insert success')
                 break
 
         for i in bsobj.findAll('a', href=re.compile('http://nbachina.qq.com/a/')):
@@ -110,15 +110,15 @@ def NBA_Official_News():
                     cur.execute("SELECT id FROM MainAPP_latest_news WHERE title = %s", (i.span.next_sibling.next_sibling.string))
                     The_ID = cur.fetchone()[0]
                 except:
-                    print('latest——new获取失败，说明这条新闻是新的，以下执行插入操作')
+                    print('can`t get latest——new，it is a new，i will insert')
                     cur.execute("INSERT INTO MainAPP_latest_news (title,url,created_time) VALUES (%s,%s,%s)",
                         (i.span.next_sibling.next_sibling.string, i.attrs['href'], datetime.datetime.now()))
                     cur.connection.commit()
-                    print('插入成功')
+                    print('insert success')
                 break
 
     except:
-        print('NBA官方的数据操作失败')
+        print('can`t caozuo shuju ')
 
 
 
@@ -134,7 +134,7 @@ def Videos_98():
 
     except:
 
-        print('获取98篮球网录像页面失败')
+        print('can`t get 98nba html')
 
 
     try:
@@ -147,19 +147,19 @@ def Videos_98():
                     cur.execute("SELECT id FROM MainAPP_lx WHERE title = %s", (i.string))  # 获取获取的比赛的id，出错说明数据库不存在
                     The_ID = cur.fetchone()[0]
                 except:
-                    print('lx获取失败，说明这条lx是新的，以下执行插入操作')
+                    print('can`t get lx，it is a new，i will insert')
                     # print(i.string,i['href'])
                     cur.execute("INSERT INTO MainAPP_lx (title,created_time) VALUES (%s,%s)",
                                 (i.string, datetime.datetime.now()))  # 将这场比赛插入到数据库当中
                     cur.connection.commit()
-                    print('插入成功')
+                    print('insert success')
                     cur.execute("SELECT id FROM MainAPP_lx WHERE title = %s", (i.string))  # 获取刚刚插入的比赛的id
                     The_ID = cur.fetchone()[0]
                     # --------------------------------------------以下代码的作用是打开某场比赛的链接，看到这场比赛的每节比赛的链接
-                    print('打开这个lx所对应的页面')
+                    print('open the game html')
                     h = urlopen('http://www.nba98.com' + i['href'])
                     bs = BeautifulSoup(h, 'lxml')
-                    print('打开成功')
+                    print('open success')
                     for j in bs.findAll('a', href=re.compile('http')):
                         if re.match('http://www.', j['href']):
                             continue
@@ -174,7 +174,7 @@ def Videos_98():
                 break
                 #---------------------------------------------
     except:
-        print('98篮球网录像的数据操作失败')
+        print('98nba caozuo shibai')
 
 
 
