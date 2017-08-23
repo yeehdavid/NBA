@@ -44,35 +44,35 @@ def Hoop_Latest_News():
     except:
         print('cant get the hoop html')
 
+    try:
 
 
 
+        for i in bsobj.find_all('a' ,href = re.compile('https://voice.hupu.com/nba/')):#获取最新动态
+            if 'target' not in i.attrs:
+                continue
 
-    for i in bsobj.find_all('a' ,href = re.compile('https://voice.hupu.com/nba/')):#获取最新动态
-        if 'target' not in i.attrs:
-            continue
+            else:
 
-        else:
+                try:
+                    cur.execute("SELECT id FROM MainAPP_hoop_latest_news WHERE title = %s", (i.string))
+                    The_ID = cur.fetchone()[0]
 
-            try:
-                cur.execute("SELECT id FROM MainAPP_hoop_latest_news WHERE title = %s", (i.string))
-                The_ID = cur.fetchone()[0]
-
-                #如果这条新闻不在set当中那就进行存储操作
-                #此处代码将新闻主要信息存入数据库中
-                #print(i.attrs['href'],i.string)
-            except:
-                print('can`t get hoop——new,it is a new ,i will insert into my table')
-                cur.execute("INSERT INTO MainAPP_hoop_latest_news (title,url,created_time) VALUES (%s,%s,%s)",
-                            (i.string, i.attrs['href'], datetime.datetime.now()))
-                cur.connection.commit()
-                print('insert success')
-                #
-                #print(time.time())
-            #print('插入数据完毕：', datetime.datetime.now())
-            break
-
-
+                    #如果这条新闻不在set当中那就进行存储操作
+                    #此处代码将新闻主要信息存入数据库中
+                    #print(i.attrs['href'],i.string)
+                except:
+                    print('can`t get hoop latest new,it is a new ,i will insert into my table')
+                    cur.execute("INSERT INTO MainAPP_hoop_latest_news (title,url,created_time) VALUES (%s,%s,%s)",
+                                (i.string, i.attrs['href'], datetime.datetime.now()))
+                    cur.connection.commit()
+                    print('insert success')
+                    #
+                    #print(time.time())
+                #print('插入数据完毕：', datetime.datetime.now())
+                break
+    except:
+        print('hoop_latest_news caozuo shibai')
 
 
 
@@ -97,7 +97,7 @@ def NBA_Official_News():
                     cur.execute("SELECT id FROM MainAPP_board_news WHERE title = %s", (i.span.string))
                     The_ID = cur.fetchone()[0]
                 except:
-                    print('can`t get NBA`Board——new,it is a new,i will insert into my table')
+                    print('can`t get NBA`Board__new,it is a new,i will insert into my table')
                     cur.execute("INSERT INTO MainAPP_board_news (title,url,img_src,created_time) VALUES (%s,%s,%s,%s)",
                                 (i.span.string, i.attrs['href'], i.img.attrs['src'], datetime.datetime.now()))
                     cur.connection.commit()
@@ -110,7 +110,7 @@ def NBA_Official_News():
                     cur.execute("SELECT id FROM MainAPP_latest_news WHERE title = %s", (i.span.next_sibling.next_sibling.string))
                     The_ID = cur.fetchone()[0]
                 except:
-                    print('can`t get latest——new,it is a new,i will insert')
+                    print('can`t get latest__new,it is a new,i will insert')
                     cur.execute("INSERT INTO MainAPP_latest_news (title,url,created_time) VALUES (%s,%s,%s)",
                         (i.span.next_sibling.next_sibling.string, i.attrs['href'], datetime.datetime.now()))
                     cur.connection.commit()
@@ -118,7 +118,7 @@ def NBA_Official_News():
                 break
 
     except:
-        print('cant NBA offical caozuo shuju ')
+        print('cant caozuo shuju ')
 
 
 
