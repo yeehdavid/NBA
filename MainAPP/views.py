@@ -32,3 +32,6 @@ def pt(request):
 
 def go(request):
     return render(request, 'haiwai/go.html')
+
+def zimeiti(request):
+    return render(request, 'zimeiti.html')

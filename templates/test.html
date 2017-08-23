@@ -9,14 +9,20 @@
 </head>
 <body>
 
+<button onclick="modelfunction('https://www.baidu.com')">
 
-<div align="center">
-<iframe width="800" height="600" src="http://www.baidu.com" scrolling="no" hspace="-100" vspace="-150"></iframe>
-</div>
+</button>
 
+<script type="text/javascript">
 
+	function modelfunction(href)
+	{
+		document.getElementById('iframe0').src=href
+	}
 
+</script>
 
+<iframe id="iframe0" width="100%" height="600"    marginwidth=0  marginheight=0></iframe>
 
 </body>
 </html>

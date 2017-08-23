@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index, name='index'),
     url(r'^videos/', views.videos, name='videos'),
-
+    url(r'^zimeiti/', views.zimeiti, name='zimeiti'),
     url(r'^ins/', views.ins, name='ins'),
     url(r'^mt/', views.mt, name='mt'),
     url(r'^pt/', views.pt, name='pt'),
