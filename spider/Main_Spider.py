@@ -131,7 +131,7 @@ def Videos_98():
     try:
         ht = urlopen(url)
         bsobj = BeautifulSoup(ht, 'lxml')
-        print('bs is ok')
+
     except:
 
         print('获取98篮球网录像页面失败')
