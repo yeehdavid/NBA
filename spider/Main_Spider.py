@@ -77,7 +77,7 @@ def Hoop_Latest_News():
                     #此处代码将新闻主要信息存入数据库中
                     #print(i.attrs['href'],i.string)
                 except:
-                    print('can`t get hoop——new,it is a new ,i will insert into my table')
+                    print('can`t get hoopnew,it is a new ,i will insert into my table')
                     cur.execute("INSERT INTO MainAPP_hoop_latest_news (title,url,created_time) VALUES (%s,%s,%s)",
                                 (i.string, i.attrs['href'], datetime.datetime.now()))
                     cur.connection.commit()
@@ -113,7 +113,7 @@ def NBA_Official_News():
                     cur.execute("SELECT id FROM MainAPP_board_news WHERE title = %s", (i.span.string))
                     The_ID = cur.fetchone()[0]
                 except:
-                    print('can`t get NBA`Board——new,it is a new,i will insert into my table')
+                    print('can`t get NBA`Boardnew,it is a new,i will insert into my table')
                     cur.execute("INSERT INTO MainAPP_board_news (title,url,img_src,created_time) VALUES (%s,%s,%s,%s)",
                                 (i.span.string, i.attrs['href'], i.img.attrs['src'], datetime.datetime.now()))
                     cur.connection.commit()
@@ -126,7 +126,7 @@ def NBA_Official_News():
                     cur.execute("SELECT id FROM MainAPP_latest_news WHERE title = %s", (i.span.next_sibling.next_sibling.string))
                     The_ID = cur.fetchone()[0]
                 except:
-                    print('can`t get latest——new,it is a new,i will insert')
+                    print('can`t get latestnew,it is a new,i will insert')
                     cur.execute("INSERT INTO MainAPP_latest_news (title,url,created_time) VALUES (%s,%s,%s)",
                         (i.span.next_sibling.next_sibling.string, i.attrs['href'], datetime.datetime.now()))
                     cur.connection.commit()
