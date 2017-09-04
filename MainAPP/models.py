@@ -71,3 +71,14 @@ class Hoop_Hot_News(models.Model):#虎扑头条新闻
     created_time = models.DateTimeField(default=datetime.datetime.now, blank=True)
     title = models.CharField(max_length=100)
     url = models.CharField(max_length=200, blank=True)
+
+class Jrs(models.Model):
+
+    created_time = models.DateTimeField(default=datetime.datetime.now, blank=True)
+    url = models.CharField(max_length=200, blank=True)
+    game_tag = models.CharField(max_length=200, blank=True)
+    game_time = models.CharField(max_length=200, blank=True)
+    first_team_logo = models.CharField(max_length=200, blank=True)
+    first_team_name = models.CharField(max_length=200, blank=True)
+    second_team_name = models.CharField(max_length=200, blank=True)
+    second_team_logo = models.CharField(max_length=200, blank=True)

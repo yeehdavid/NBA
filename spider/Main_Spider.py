@@ -4,35 +4,49 @@ import re
 import pymysql
 import datetime
 import time
+from selenium import webdriver
 
 conn = pymysql.connect(host='127.0.0.1', user='root', passwd='344126509', db='NBA', charset='utf8')
 cur=conn.cursor()
-
-
+HOUR = 100
 #--------------------------------------------------------------------------------------------------------------
-try:
-    cur.execute("SELECT title from MainAPP_lx where id/created_time=(select max(id/created_time) from MainAPP_lx)")
-    Videos98 = cur.fetchone()[0]
-except:
-    pass
 
-try:
-    cur.execute("SELECT title from MainAPP_hoop_latest_news where id/created_time=(select max(id/created_time) from MainAPP_hoop_latest_news)")
-    HOOP_S = cur.fetchone()[0]
-except:
-    pass
+def selenium_get_bsobj(url):
 
-try:
-    cur.execute("SELECT title from MainAPP_board_news where id/created_time=(select max(id/created_time) from MainAPP_board_news)")
-    BOARD = cur.fetchone()[0]
-except:
-    pass
+    driver = webdriver.PhantomJS(executable_path='/home/david/phantomjs-2.1.1-linux-x86_64/bin/phantomjs')
+    driver.set_page_load_timeout(180)  # 设置页面最长加载时间为40s
+    driver.get(url)
+    time.sleep(1)
+    #print(driver.find_element_by_id('body').text)
 
-try:
-    cur.execute("SELECT title from MainAPP_latest_news where id/created_time=(select max(id/created_time) from MainAPP_latest_news)")
-    LATEST = cur.fetchone()[0]
-except:
-    pass
+    #driver.get_screenshot_as_file('01.png')  # 保存网页截图
+    sou = driver.page_source
+
+    #b  = BeautifulSoup(sou)
+    #print(driver.find_element_by_class_name('game-item'))
+    driver.quit()
+
+    return BeautifulSoup(sou,'lxml')
+
+def selenium_get_source(url):
+
+    driver = webdriver.PhantomJS(executable_path='/home/david/phantomjs-2.1.1-linux-x86_64/bin/phantomjs')
+    driver.set_page_load_timeout(40)  # 设置页面最长加载时间为40s
+    print('start get')
+    driver.get(url)
+    time.sleep(1)
+    print('sleep')
+    #print(driver.find_element_by_id('body').text)
+
+    #driver.get_screenshot_as_file('01.png')  # 保存网页截图
+    sou = driver.page_source
+
+    #b  = BeautifulSoup(sou)
+    #print(driver.find_element_by_class_name('game-item'))
+    driver.quit()
+
+    return sou
+
 #--------------------------------------------------------------------------------------------------------------
 def Hoop_Latest_News():
 
@@ -43,6 +57,7 @@ def Hoop_Latest_News():
         bsobj = BeautifulSoup(ht.read(), 'lxml')
     except:
         print('cant get the hoop html')
+        return
 
     try:
 
@@ -62,7 +77,7 @@ def Hoop_Latest_News():
                     #此处代码将新闻主要信息存入数据库中
                     #print(i.attrs['href'],i.string)
                 except:
-                    print('can`t get hoop latest new,it is a new ,i will insert into my table')
+                    print('can`t get hoop——new,it is a new ,i will insert into my table')
                     cur.execute("INSERT INTO MainAPP_hoop_latest_news (title,url,created_time) VALUES (%s,%s,%s)",
                                 (i.string, i.attrs['href'], datetime.datetime.now()))
                     cur.connection.commit()
@@ -85,9 +100,10 @@ def NBA_Official_News():
     url = 'http://china.nba.com/news/'
     try:
         ht = urlopen(url)
-        bsobj = BeautifulSoup(ht, 'lxml')
+        bsobj = BeautifulSoup(ht, 'lxml',fromEncoding="gb18030")
     except:
         print('cant get the NBA offical html')
+        return
     try:
 
 
@@ -97,7 +113,7 @@ def NBA_Official_News():
                     cur.execute("SELECT id FROM MainAPP_board_news WHERE title = %s", (i.span.string))
                     The_ID = cur.fetchone()[0]
                 except:
-                    print('can`t get NBA`Board__new,it is a new,i will insert into my table')
+                    print('can`t get NBA`Board——new,it is a new,i will insert into my table')
                     cur.execute("INSERT INTO MainAPP_board_news (title,url,img_src,created_time) VALUES (%s,%s,%s,%s)",
                                 (i.span.string, i.attrs['href'], i.img.attrs['src'], datetime.datetime.now()))
                     cur.connection.commit()
@@ -110,7 +126,7 @@ def NBA_Official_News():
                     cur.execute("SELECT id FROM MainAPP_latest_news WHERE title = %s", (i.span.next_sibling.next_sibling.string))
                     The_ID = cur.fetchone()[0]
                 except:
-                    print('can`t get latest__new,it is a new,i will insert')
+                    print('can`t get latest——new,it is a new,i will insert')
                     cur.execute("INSERT INTO MainAPP_latest_news (title,url,created_time) VALUES (%s,%s,%s)",
                         (i.span.next_sibling.next_sibling.string, i.attrs['href'], datetime.datetime.now()))
                     cur.connection.commit()
@@ -129,12 +145,13 @@ def Videos_98():
 
     url = 'http://www.nba98.com/nbalx/'
     try:
-        ht = urlopen(url)
-        bsobj = BeautifulSoup(ht, 'lxml')
+
+        bsobj = selenium_get_bsobj(url)
 
     except:
 
         print('cant get 98nba html')
+        return
 
 
     try:
@@ -157,11 +174,11 @@ def Videos_98():
                     The_ID = cur.fetchone()[0]
                     # --------------------------------------------以下代码的作用是打开某场比赛的链接，看到这场比赛的每节比赛的链接
                     print('open the game html')
-                    h = urlopen('http://www.nba98.com' + i['href'])
-                    bs = BeautifulSoup(h, 'lxml')
+
+                    bs = selenium_get_bsobj('http://www.nba98.com' + i['href'])
                     print('open success')
                     for j in bs.findAll('a', href=re.compile('http')):
-                        if re.match('http://www.', j['href']):
+                        if re.match('http://www.', j['href']) or re.match('http://changyan.kuaizhan.com/',j['href']):
                             continue
                         else:
 
@@ -177,13 +194,47 @@ def Videos_98():
         print('98nba caozuo shibai')
 
 
+def jrs_zhibo():
+    global HOUR
+    now_hour = str(datetime.datetime.now())[11:13]
+    if now_hour ==  HOUR:
+        return
+    HOUR=now_hour
+    url='http://nba.tmiaoo.com/body.html'
+    #try:
+    try:
+        bsobj = selenium_get_bsobj(url)
+        cur.execute("TRUNCATE TABLE MainAPP_jrs;")
+        cur.connection.commit()
+        for i in bsobj.findAll('a'):
+
+            #print(i['href'])#比赛链接
+            #print(i.div.font.string)#比赛类型
+            #print(i.div.next_sibling.string) #比赛时间
+            #print(i.img['src'])#一队的标志
+            #print(i.span.string )#一队的名字
+            #print(i.div.next_sibling.next_sibling.next_sibling.next_sibling.span.string)#二队名字
+            #print(i.div.next_sibling.next_sibling.next_sibling.next_sibling.img['src'])#二队标志
+
+            cur.execute("INSERT INTO MainAPP_jrs (url,game_tag,game_time,first_team_logo,first_team_name,second_team_name,second_team_logo,created_time) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+                        (i['href'],i.div.font.string,str(i.div.next_sibling.string).strip(),i.img['src'],i.span.string,
+                         i.div.next_sibling.next_sibling.next_sibling.next_sibling.span.string,
+                         i.div.next_sibling.next_sibling.next_sibling.next_sibling.img['src'],
+                         datetime.datetime.now()))  # 将这场比赛插入到数据库当中
+            cur.connection.commit()
+
+    except :
+        print('cant get jrs bsobj')
+
 
 while True:
 
     Hoop_Latest_News()
     time.sleep(35)
+
     NBA_Official_News()
     time.sleep(35)
-    Videos_98()
 
+    Videos_98()
     time.sleep(35)
+    jrs_zhibo()

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block main %}
+<div class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <center>直播入口</center>
+              </div>
+
+                <ul class="list-group" >
+                    {% for jrs in jrs_list %}
+                  <a  class="list-group-item "  href={{jrs.url}} target="_blank">
+                      <div class="row">
+                          <div class = col-md-2>
+                            {{jrs.game_tag}}
+                          </div>
+                          <div class = col-md-3>
+                            <img src={{jrs.first_team_logo}} width="30" height="30" >
+                            <small>{{jrs.first_team_name}}</small>
+                          </div>
+
+                          <div class = col-md-2>
+                            {{jrs.game_time}}
+                          </div>
+                          <div class = col-md-2>
+                            <small >{{jrs.second_team_name}}</small>
+
+                          </div>
+                          <div class = col-md-1>
+                            <img src={{jrs.second_team_logo}} width="30" height="30" style="float:right">
+                          </div>
+
+                      </div>
+                  </a>
+                  {% endfor %}
+                </ul>
+
+            </div>
+          </div>
+        </div>
+{% endblock main %}

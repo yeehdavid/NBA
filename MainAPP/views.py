@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from MainAPP.models import Videos, Board_News,Latest_News,Board_Videos,Lx,Lx_Part,Hoop_Latest_News
+from MainAPP.models import Videos, Board_News,Latest_News,Board_Videos,Lx,Lx_Part,Hoop_Latest_News,Jrs
 import collections
 # Create your views here.
 def index(request):
@@ -8,8 +8,12 @@ def index(request):
     News_list1 = B_N[1:5]#轮播的后面几张
     News_list2 = Latest_News.objects.all().order_by('-created_time')[0:11]
     Hoop_News = Hoop_Latest_News.objects.all().order_by('-created_time')[0:33]
+    jrs_list = Jrs.objects.all().order_by('created_time')
     return render(request, 'index.html', context={'News_list0':News_list0,'News_list1':News_list1,'News_list2':News_list2,
-                                                  'Hoop_left':Hoop_News[0:11],'Hoop_center':Hoop_News[11:22],'Hoop_right':Hoop_News[22:33]})
+                                                  'Hoop_left':Hoop_News[0:11],'Hoop_center':Hoop_News[11:22],
+                                                  'Hoop_right':Hoop_News[22:33],
+                                                  'jrs_list':jrs_list
+                                                  })
 
 def videos(request):
     dic = collections.OrderedDict()
@@ -20,7 +24,9 @@ def videos(request):
 
     return render(request,'videos.html',context={'luxiang':dic})
 
-
+def zhibo(request):
+    jrs_list = Jrs.objects.all().order_by('created_time')
+    return render(request,'zhibo.html',context={'jrs_list':jrs_list})
 def ins(request):
     return render(request, 'haiwai/ins.html')
 
