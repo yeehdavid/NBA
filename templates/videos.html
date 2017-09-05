@@ -2,40 +2,89 @@
 {% load staticfiles %}
 {% block main %}
 <div class="row">
-	<div class="col-md-4">
-		<div class="row">
-			<div class="col-md-2"></div>
-			<div class="col-md-10">
-				<div class="panel-group" id="accordion">
+    <div class="col-md-1"></div>
+    <div class="col-md-7">
+        <div class="row">
+            <div class="col-md-11">
+                <table class="table table-hover ">
+                    <caption></caption>
+                    <thead>
+                    <tr>
+                        <th>赛事</th>
+                        <th></th>
+                        <th><center>时间</center></th>
 
-					{% for key,value in luxiang.items %}
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion"
-								   href="#{{ forloop.counter }}">
 
-											{{key}}
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for jrs in jrs_list %}
+                    <tr onclick="window.open('{{jrs.url}}');">
+                        <td>{{jrs.game_tag}}</td>
 
-								</a>
-							</h4>
-						</div>
-						<div id="{{ forloop.counter }}" class="panel-collapse collapse ">
-							<div class="panel-body">
-								<ul class="list-group">
-								{% for u in value %}
-									<li class="list-group-item"><a href="{{u.url}}" target="_blank">{{u}}</a></li>
-								{% endfor %}
+                        <td>
+                            <div style="float:right">
+                                <small>{{jrs.first_team_name}}</small>
+                                <img src={{jrs.first_team_logo}} width="30" height="30">
+                            </div>
 
-								</ul>
-							</div>
-						</div>
-					</div>
-					{% endfor %}
 
-				</div>
-			</div>
-		</div>
-	</div>
+                        </td>
+                        <td><center>{{jrs.game_time}}</center></td>
+                        <td>
+                            <img src={{jrs.second_team_logo}} width="30" height="30">
+                            <small>{{jrs.second_team_name}}</small>
+
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-4" style="margin-top:50px;">
+        <div class="row">
+
+            <div class="col-md-10">
+                <div class="panel-group" id="accordion">
+
+                    {% for key,value in luxiang.items %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+
+                            <a data-toggle="collapse" data-parent="#accordion"
+                               href="#{{ forloop.counter }}" style="color:black">
+
+                                {{key}}
+
+                            </a>
+
+                        </div>
+                        <div id="{{ forloop.counter }}" class="panel-collapse collapse ">
+                            <div class="panel-body">
+                                <ul class="list-group">
+                                    {% for u in value %}
+                                    <li class="list-group-item"><a href="{{u.url}}" target="_blank">{{u}}</a></li>
+                                    {% endfor %}
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <a href="">点击查看更多录像</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock main %}

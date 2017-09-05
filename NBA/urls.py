@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^mt/', views.mt, name='mt'),
     url(r'^pt/', views.pt, name='pt'),
     url(r'^go/', views.go, name='go'),
-    url(r'^zhibo/', views.zhibo, name='zhibo'),
+
 
     url(r'^users/',include('users.urls')),
 

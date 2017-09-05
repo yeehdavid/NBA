@@ -2,14 +2,134 @@
 {% load staticfiles %}
 {% block main %}
 
-<iframe src="https://ins.doger.top" frameborder="0" width="100%" height="600">
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="panel panel-danger">
+            <div class="panel-heading">最热球星</div>
+            <div class="panel-body">
+                <button class="btn btn-default " data-toggle="modal" data-target="#myModal"
+                        onclick="modalfunction('https://ins.doger.top/kingjames/')">
+                    <span>詹姆斯</span>
+                </button>
 
-</iframe>
+                <button class="btn btn-default " data-toggle="modal" data-target="#myModal"
+                        onclick="modalfunction('https://ins.doger.top/stephencurry30/')">
+                    <span>库里</span>
+                </button>
+
+                <button class="btn btn-default " data-toggle="modal" data-target="#myModal"
+                        onclick="modalfunction('https://ins.doger.top/kevindurant/')">
+                    <span>杜兰特</span>
+                </button>
+
+                <button class="btn btn-default " data-toggle="modal" data-target="#myModal"
+                        onclick="modalfunction('https://ins.doger.top/russwest44/')">
+                    <span>威少</span>
+                </button>
+
+                <button class="btn btn-default " data-toggle="modal" data-target="#myModal"
+                        onclick="modalfunction('https://ins.doger.top/kobebryant/')">
+                    <span>科比</span>
+                </button>
+
+                <button class="btn btn-default " data-toggle="modal" data-target="#myModal"
+                        onclick="modalfunction('https://ins.doger.top/shaq/')">
+                    <span>奥尼尔</span>
+                </button>
+
+                <button class="btn btn-default " data-toggle="modal" data-target="#myModal"
+                        onclick="modalfunction('https://ins.doger.top/dwyanewade/')">
+                    <span>韦德</span>
+                </button>
+
+                <button class="btn btn-default " data-toggle="modal" data-target="#myModal"
+                        onclick="modalfunction('https://ins.doger.top/jharden13/')">
+                    <span>哈登</span>
+                </button>
+
+                <button class="btn btn-default " data-toggle="modal" data-target="#myModal"
+                        onclick="modalfunction('https://ins.doger.top/ygtrece/')">
+                    <span>保罗-乔治</span>
+                </button>
+
+                <button class="btn btn-default " data-toggle="modal" data-target="#myModal"
+                        onclick="modalfunction('https://ins.doger.top/kyrieirving/')">
+                    <span>欧文</span>
+                </button>
+
+                <button class="btn btn-default " data-toggle="modal" data-target="#myModal"
+                        onclick="modalfunction('https://ins.doger.top/isaiahthomas/')">
+                    <span>小托马斯</span>
+                </button>
+
+                <button class="btn btn-default " data-toggle="modal" data-target="#myModal"
+                        onclick="modalfunction('https://ins.doger.top/giannis_an34/')">
+                    <span>字母哥</span>
+                </button>
+
+                <button class="btn btn-default " data-toggle="modal" data-target="#myModal"
+                        onclick="modalfunction('https://ins.doger.top/antdavis23/')">
+                    <span>浓眉哥</span>
+                </button>
+
+
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">热门帖子</div>
+            <div class="panel-body">
+                <iframe src="https://ins.doger.top/explore/tags/nba/" vspace="-200" hspace="-800"  height="630" width="100%"
+                        frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="modalfunction('')">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel" title="haha">
+
+                </h4>
+            </div>
+            <div class="modal-body">
+                <iframe id="modal_iframe" width="100%" height="600" frameborder=no border=0 marginwidth=0
+                        marginheight=0></iframe>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script type="text/javascript">
+
+	function modalfunction(url)
+	{
+		document.getElementById('modal_iframe').src=url
+	}
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+</script>
 
 {% endblock main %}

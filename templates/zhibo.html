@@ -4,30 +4,37 @@
 <div class="row">
     <div class="col-md-2"></div>
 
-  <div class="col-md-8">
+  <div class="col-md-6">
     <table class="table table-hover ">
       <caption></caption>
       <thead>
         <tr>
           <th>赛事</th>
 
-          <th></th>
           <th>时间</th>
+          <th></th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         {% for jrs in jrs_list %}
-        <tr>
+        <tr onclick="window.open('{{jrs.url}}');">
           <td>{{jrs.game_tag}}</td>
-          <td>
-              <img src={{jrs.first_team_logo}} width="30" height="30" >
-              <small>{{jrs.first_team_name}}</small>
-          </td>
           <td>{{jrs.game_time}}</td>
           <td>
+            <div style="float:right">
+              <small>{{jrs.first_team_name}}</small>
+              <img src={{jrs.first_team_logo}} width="30" height="30" >
+            </div>
 
-              <small >{{jrs.second_team_name}}</small>
-              <img src={{jrs.second_team_logo}} width="30" height="30" >
+
+          </td>
+          <td><center>VS</center></td>
+          <td>
+            <img src={{jrs.second_team_logo}} width="30" height="30" >
+            <small >{{jrs.second_team_name}}</small>
+
           </td>
 
         </tr>
