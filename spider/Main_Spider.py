@@ -148,7 +148,7 @@ def Videos_98():
 
         bsobj = selenium_get_bsobj(url)
 
-    except:
+    except Exception as e:
 
         print('cant get 98nba html')
         return
@@ -237,4 +237,4 @@ while True:
 
     Videos_98()
     time.sleep(35)
-    jrs_zhibo()
+    #jrs_zhibo()
