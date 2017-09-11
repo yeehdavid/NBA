@@ -1,44 +1,161 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% block main %}
+<link href="{% static 'css/fz-video.css' %}" rel="stylesheet">
+<link href="{% static 'font/iconfont.css' %}" rel="stylesheet">
+
+<style>
+
+pre{
+white-space:pre-wrap; /* css3.0 */
+white-space:-moz-pre-wrap; /* Firefox */
+white-space:-pre-wrap; /* Opera 4-6 */
+white-space:-o-pre-wrap; /* Opera 7 */
+word-wrap:break-word; /* Internet Explorer 5.5+ */
+background-color:#ffffff;
+border:0;
+}
 
 
-<button class="btn btn-default " data-toggle="modal" data-target="#myModal" onclick="modalfunction('https://mt.doger.top/KingJames')">
-    <span>KingJames</span>
-</button>
-
-<button class="btn btn-default " data-toggle="modal" data-target="#myModal" onclick="modalfunction('https://www.baidu.com')">
-    <span>Baidu</span>
-</button>
 
 
-<!-- 模态框（Modal） -->
-<div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="modalfunction('')">
-					&times;
-				</button>
-				<h4 class="modal-title" id="myModalLabel">
-					KingJames的Twitter主页
-				</h4>
-			</div>
-			<div class="modal-body">
-				<iframe id="modal_iframe" width="100%" height="600" frameborder=no  border=0 marginwidth=0  marginheight=0></iframe>
-			</div>
 
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal -->
+
+
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+
+            {% for article in article_list %}
+            <div class="panel panel-default">
+                <div class="panel-body" >
+                    <pre id="{{forloop.counter}}" style="font-size:120%">{{article.title}}</pre>
+                    {% ifequal article.video_url '0' %}
+
+
+                    {% else %}
+
+                    <img onclick="video_modalfunction('{{article.video_url}}')" src="{{article.img_src_1}}"
+                         class="img-rounded" width="60%" style="margin-left:12px;" data-toggle="modal"
+                         data-target="#myModal">
+
+
+                    {% endifequal %}
+
+                </div>
+            </div>
+
+            {% endfor %}
+            <center>
+
+                <ul class="pager">
+                    {% if article_list.has_previous %}
+                    <li class="previous"><a href="?page={{article_list.previous_page_number}}">&larr; Newer</a></li>
+                    {% else %}
+                    <li class="previous disabled"><a href="#">&larr; Newer</a></li>
+                    {% endif %}
+                    {% if article_list.has_next %}
+                    <li class="next"><a href="?page={{article_list.next_page_number}}">Older &rarr;</a></li>
+                    {% else %}
+                    <li class="next disabled"><a href="#">Older &rarr;</a></li>
+                    {% endif %}
+                </ul>
+
+            </center>
+
+        </div>
+        <div class="col-md-2"></div>
+    </div>
 </div>
+<!-- 模态框（Modal） -->
+<div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="modalfunction('')">
+                    &times;
+                </button>
+
+            </div>
+            <div class="modal-body" id="video_box" style="width: 100%;
+                        height: 537px;
+                        margin: 0 auto;">
+
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script src="{% static 'js/fz-video.js' %}"></script>
 
 <script type="text/javascript">
 
 	function modalfunction(url)
-	{
-		document.getElementById('modal_iframe').src=url
+	{cd
+		document.getElementById('').src=url
 	}
+
+	function video_modalfunction(video_url,id)
+	{
+        var FZ_VIDEO = new createVideo(
+ 		'video_box',	//容器的id
+ 		{
+ 			url 		: video_url, 	//视频地址
+ 			autoplay	: true				//是否自动播放
+ 		}
+ 	);
+
+ 	$('#myModal').on('hidden.bs.modal', function() {
+        FZ_VIDEO.overVideo();
+    });
+	}
+
+
 
 </script>
 
+<script type="text/javascript">
+function show(id){
+  var box = document.getElementById(id);
+  var text = box.innerHTML;
+  var newBox = document.createElement("div");
+  var btn = document.createElement("a");
+  newBox.innerHTML = text.substring(0,150);
+  btn.innerHTML = text.length > 150 ? "显示全部" : "";
+  btn.href = "###";
+  btn.onclick = function(){
+    if(btn.innerHTML == "显示全部"){
+      btn.innerHTML = "收起";
+      newBox.innerHTML = text;
+    }
+    else{
+      btn.innerHTML = "显示全部";
+      newBox.innerHTML = text.substring(0,150);
+    }
+  }
+  box.innerHTML = "";
+  box.appendChild(newBox);
+  box.appendChild(btn);
+}
+window.onload=function(){
+  for (var i = 1; i < 16;i++)
+  {
+  show(i);
+  }
+}
+
+
+
+
+
+
+
+
+
+</script>
 {% endblock main %}

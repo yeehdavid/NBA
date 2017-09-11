@@ -91,3 +91,27 @@ class Jrs(models.Model):
     first_team_name = models.CharField(max_length=200, blank=True)
     second_team_name = models.CharField(max_length=200, blank=True)
     second_team_logo = models.CharField(max_length=200, blank=True)
+
+
+class ZiMeiTi_Article(models.Model):
+
+    def __str__(self):
+        return self.title
+
+    title = models.TextField()
+    url = models.CharField(max_length=200, blank=True)
+    created_time = models.DateTimeField(default=datetime.datetime.now)
+
+    video_url = models.CharField(max_length=200, default=0)
+
+    img_src_1 = models.CharField(max_length=200, blank=True)
+    img_src_2 = models.CharField(max_length=200, blank=True)
+    img_src_3 = models.CharField(max_length=200, blank=True)
+    img_src_4 = models.CharField(max_length=200, blank=True)
+    img_src_5 = models.CharField(max_length=200, blank=True)
+    img_src_6 = models.CharField(max_length=200, blank=True)
+    img_src_7 = models.CharField(max_length=200, blank=True)
+    img_src_8 = models.CharField(max_length=200, blank=True)
+    img_src_9 = models.CharField(max_length=200, blank=True)
+
+    img_count = models.CharField(max_length=50,default=0)
