@@ -14,9 +14,9 @@ HOUR = 100
 class sina_spider():
     # 开始登录----------------------------------------------------------------------------------------------
     def __init__(self):
-        self.dic = {'篮球大图': 2432009827, '篮球技巧教学': 2494935602, '虎扑篮球': 1642292081, '篮球教学论坛': 2357832895,
-                    '直播吧篮球': 3171897472,
-                    '篮球大历史': 2302617634, '只关于篮球': 5508233899, '微观篮球': 5635855696}
+        self.dic = {'lanqiudatu': 2432009827, 'lanqiujiqiaojiaoxue': 2494935602, 'hupulanqiu': 1642292081, 'lanqiujiaoxueluntan': 2357832895,
+                    'zhibobalanqiu': 3171897472,
+                    'lanqiudalishi': 2302617634, 'zhiguanyulanqiu': 5508233899, 'weiguanlanqiu': 5635855696}
         self.driver = webdriver.PhantomJS(executable_path='/home/david/phantomjs-2.1.1-linux-x86_64/bin/phantomjs')
         self.driver.implicitly_wait(30)
         self.driver.set_page_load_timeout(30)
