@@ -11,41 +11,164 @@ cur=conn.cursor()
 HOUR = 100
 #--------------------------------------------------------------------------------------------------------------
 
+class sina_spider():
+    # 开始登录----------------------------------------------------------------------------------------------
+    def __init__(self):
+        self.dic = {'篮球大图': 2432009827, '篮球技巧教学': 2494935602, '虎扑篮球': 1642292081, '篮球教学论坛': 2357832895,
+                    '直播吧篮球': 3171897472,
+                    '篮球大历史': 2302617634, '只关于篮球': 5508233899, '微观篮球': 5635855696}
+        self.driver = webdriver.PhantomJS(executable_path='/home/david/phantomjs-2.1.1-linux-x86_64/bin/phantomjs')
+        self.driver.implicitly_wait(30)
+        self.driver.set_page_load_timeout(30)
+        self.driver.set_script_timeout(30)
+        self.driver.get('https://m.weibo.cn/')
+        time.sleep(3)
+        login_url_btn = self.driver.find_element_by_class_name("btnWhite")
+        login_url_btn.click()
+        time.sleep(5)
+
+        self.driver.find_element_by_id('loginName').send_keys("344126509@qq.com")
+
+        self.driver.find_element_by_id('loginPassword').send_keys('wo344126509ni')
+
+        self.driver.find_element_by_id('loginAction').click()
+
+        time.sleep(5)
+
+    # 登录结束----------------------------------------------------------------------------------------------
+
+
+    def get_weibo(self, id):
+        try:
+            self.driver.get('https://m.weibo.cn/u/' + str(id))
+            time.sleep(5)
+
+            card = self.driver.find_elements_by_class_name('weibo-main')[1]  # 得到第一条非置顶微博
+            title = card.find_element_by_class_name('weibo-text')
+            print(title.text)
+            title.click()
+            time.sleep(3)
+        except:
+            return
+        # 至此，driver进去第一条微博的页面
+        try:
+
+            try:
+                article = self.driver.find_element_by_class_name('weibo-rp')
+                # 先判断这条微博是不是转发的，如果是，那就pass
+
+            except:
+
+                try:  # 尝试假设这是一条带图片的微博
+                    title = self.driver.find_element_by_class_name('weibo-text')
+                    title_text = title.text
+                    #-----------------------------------------------判断是否已经存在
+                    cur.execute("SELECT title FROM MainAPP_zimeiti_article WHERE title=%s", (title_text))
+                    if len(cur.fetchall()[0:100]) != 0:
+                        return
+                    #-----------------------------------------------
+                    media = self.driver.find_element_by_class_name('media-b')
+
+                    img_src_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    img_count = 0
+                    for img in media.find_elements_by_tag_name('img'):
+                        print(img.get_attribute('src'))
+                        img_src_list[img_count] = img.get_attribute('src')
+                        img_count += 1
+                    cur.execute(
+                        "INSERT INTO MainAPP_zimeiti_article (title,created_time,url,video_url,img_src_1,img_src_2,img_src_3,img_src_4,img_src_5,img_src_6,img_src_7,img_src_8,img_src_9,img_count) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        (title_text, datetime.datetime.now(), 0, 0, img_src_list[0], img_src_list[1], img_src_list[2],
+                         img_src_list[3], img_src_list[4], img_src_list[5], img_src_list[6], img_src_list[7],
+                         img_src_list[8], img_count))  # 将这场比赛插入到数据库当中
+                    cur.connection.commit()
+
+                    time.sleep(3)
+
+                    # print(driver.current_url)
+
+                except :  # 这是一条视频微博
+
+                    title = self.driver.find_element_by_class_name('weibo-text')
+                    title_text = title.text
+
+                    url = self.driver.current_url
+
+                    video_start_btn = self.driver.find_element_by_class_name('f-bg-img')  # 找到开始播放视频的按钮
+
+                    background_img_src_style = video_start_btn.get_attribute('style')  # 得到视频的背景缩略图
+                    img_src = background_img_src_style[22:][:-2]
+                    print(img_src)
+                    video_start_btn.click()  # 点击开始播放视频
+                    time.sleep(2)  # 等待视频窗口加载
+                    video_window = self.driver.find_element_by_tag_name('video')  # 弹出视频窗口后，找到视频的标签
+                    video_url = video_window.get_attribute('src')  # 从这个标签得到视频的原始URL
+                    print(video_url)
+
+                    if 'm3u8' in str(video_url):  # 当视频是m3u8格式的时候，直接跳过
+                        return
+
+                    img_src_list = [img_src, 0, 0, 0, 0, 0, 0, 0, 0]
+                    img_count = 1
+
+                    cur.execute(
+                        "INSERT INTO MainAPP_zimeiti_article (title,created_time,url,video_url,img_src_1,img_src_2,img_src_3,img_src_4,img_src_5,img_src_6,img_src_7,img_src_8,img_src_9,img_count) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        (title_text, datetime.datetime.now(), url, video_url, img_src_list[0], img_src_list[1],
+                         img_src_list[2],
+                         img_src_list[3], img_src_list[4], img_src_list[5], img_src_list[6], img_src_list[7],
+                         img_src_list[8], img_count))  # 将这场比赛插入到数据库当中
+                    cur.connection.commit()
+
+        except Exception as e0:
+            print(e0)
+
+    def get_a_video_url(self, url):
+        self.driver.get(url)
+
+        time.sleep(5)
+
+        video_start_btn = self.driver.find_element_by_class_name('f-bg-img')  # 找到开始播放视频的按钮
+
+        video_start_btn.click()  # 点击开始播放视频
+        time.sleep(2)  # 等待视频窗口加载
+        video_window = self.driver.find_element_by_tag_name('video')  # 弹出视频窗口后，找到视频的标签
+        video_url = video_window.get_attribute('src')  # 从这个标签得到视频的原始URL
+        return video_url
+
+    def update_video_url(self):
+        cur.execute("SELECT url FROM MainAPP_zimeiti_article WHERE url<>'0' ORDER BY -id")
+        print('ok')
+        L = cur.fetchall()[0:100]
+        for l in L:
+            print(l[0])
+            try:
+                cur.execute("UPDATE MainAPP_zimeiti_article SET video_url=%s WHERE url=%s", (self.get_a_video_url(l[0]), l[0]))
+                cur.connection.commit()
+            except Exception as e:
+                #cur.execute("DELETE * FROM MainAPP_zimeiti_article WHERE url=%s")
+                print(e)
+
+# ---------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------
 def selenium_get_bsobj(url):
+    try:
+        driver = webdriver.PhantomJS(executable_path='/home/david/phantomjs-2.1.1-linux-x86_64/bin/phantomjs')
+        driver.set_page_load_timeout(40)  # 设置页面最长加载时间为40s
+        driver.get(url)
+        time.sleep(3)
+        #print(driver.find_element_by_id('body').text)
 
-    driver = webdriver.PhantomJS(executable_path='/home/david/phantomjs-2.1.1-linux-x86_64/bin/phantomjs')
-    driver.set_page_load_timeout(180)  # 设置页面最长加载时间为40s
-    driver.get(url)
-    time.sleep(1)
-    #print(driver.find_element_by_id('body').text)
+        #driver.get_screenshot_as_file('01.png')  # 保存网页截图
+        sou = driver.page_source
 
-    #driver.get_screenshot_as_file('01.png')  # 保存网页截图
-    sou = driver.page_source
+        #b  = BeautifulSoup(sou)
+        #print(driver.find_element_by_class_name('game-item'))
+        driver.quit()
 
-    #b  = BeautifulSoup(sou)
-    #print(driver.find_element_by_class_name('game-item'))
-    driver.quit()
+        return BeautifulSoup(sou,'lxml')
+    except:
+        driver.quit()
 
-    return BeautifulSoup(sou,'lxml')
 
-def selenium_get_source(url):
-
-    driver = webdriver.PhantomJS(executable_path='/home/david/phantomjs-2.1.1-linux-x86_64/bin/phantomjs')
-    driver.set_page_load_timeout(40)  # 设置页面最长加载时间为40s
-    print('start get')
-    driver.get(url)
-    time.sleep(1)
-    print('sleep')
-    #print(driver.find_element_by_id('body').text)
-
-    #driver.get_screenshot_as_file('01.png')  # 保存网页截图
-    sou = driver.page_source
-
-    #b  = BeautifulSoup(sou)
-    #print(driver.find_element_by_class_name('game-item'))
-    driver.quit()
-
-    return sou
 
 #--------------------------------------------------------------------------------------------------------------
 def Hoop_Latest_News():
@@ -53,7 +176,7 @@ def Hoop_Latest_News():
     url = 'https://voice.hupu.com/nba'
 
     try:
-        ht = urlopen(url)
+        ht = urlopen(url,timeout=10)
         bsobj = BeautifulSoup(ht.read(), 'lxml')
     except:
         print('cant get the hoop html')
@@ -86,11 +209,8 @@ def Hoop_Latest_News():
                     #print(time.time())
                 #print('插入数据完毕：', datetime.datetime.now())
                 break
-    except:
-        print('hoop_latest_news caozuo shibai')
-
-
-
+    except Exception as e:
+        print(e)
 
 
 def NBA_Official_News():
@@ -99,7 +219,7 @@ def NBA_Official_News():
 
     url = 'http://china.nba.com/news/'
     try:
-        ht = urlopen(url)
+        ht = urlopen(url,timeout=10)
         bsobj = BeautifulSoup(ht, 'lxml',fromEncoding="gb18030")
     except:
         print('cant get the NBA offical html')
@@ -133,12 +253,10 @@ def NBA_Official_News():
                     print('insert success')
                 break
 
-    except:
-        print('cant caozuo shuju ')
 
+    except Exception as e:
 
-
-
+        print(e)
 
 
 def Videos_98():
@@ -148,7 +266,7 @@ def Videos_98():
 
         bsobj = selenium_get_bsobj(url)
 
-    except Exception as e:
+    except:
 
         print('cant get 98nba html')
         return
@@ -190,8 +308,8 @@ def Videos_98():
                             # print(j.string,j['href'],The_ID)
                 break
                 #---------------------------------------------
-    except:
-        print('98nba caozuo shibai')
+    except Exception as e:
+        print(e)
 
 
 def jrs_zhibo():
@@ -223,11 +341,19 @@ def jrs_zhibo():
                          datetime.datetime.now()))  # 将这场比赛插入到数据库当中
             cur.connection.commit()
 
-    except :
-        print('cant get jrs bsobj')
 
+    except Exception as e:
+
+        print(e)
+
+
+#----------------------------------------------------------------------------------------------
+spider = sina_spider()
 
 while True:
+    spider.update_video_url()
+    for k, value in spider.dic.items():
+        spider.get_weibo(value)
 
     Hoop_Latest_News()
     time.sleep(35)
@@ -237,4 +363,4 @@ while True:
 
     Videos_98()
     time.sleep(35)
-    #jrs_zhibo()
+    jrs_zhibo()
