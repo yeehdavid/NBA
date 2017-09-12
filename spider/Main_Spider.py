@@ -50,9 +50,11 @@ class sina_spider():
             print(title.text)
             title.click()
             time.sleep(3)
-        except:
+            # 至此，driver进去第一条微博的页面
+        except Exception as e :
+            print(e)
             return
-        # 至此，driver进去第一条微博的页面
+
         try:
 
             try:
