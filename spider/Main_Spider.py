@@ -354,6 +354,7 @@ while True:
     try:
         spider.update_video_url()
         for k, value in spider.dic.items():
+            print('try:',value)
             spider.get_weibo(value)
     except:
         print('spider can not login')
