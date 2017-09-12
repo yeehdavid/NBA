@@ -47,7 +47,7 @@ class sina_spider():
 
             card = self.driver.find_elements_by_class_name('weibo-main')[1]  # 得到第一条非置顶微博
             title = card.find_element_by_class_name('weibo-text')
-            print(title.text)
+
             title.click()
             time.sleep(3)
             # 至此，driver进去第一条微博的页面
@@ -76,7 +76,7 @@ class sina_spider():
                     img_src_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
                     img_count = 0
                     for img in media.find_elements_by_tag_name('img'):
-                        print(img.get_attribute('src'))
+                        #print(img.get_attribute('src'))
                         img_src_list[img_count] = img.get_attribute('src')
                         img_count += 1
                     cur.execute(
@@ -101,12 +101,12 @@ class sina_spider():
 
                     background_img_src_style = video_start_btn.get_attribute('style')  # 得到视频的背景缩略图
                     img_src = background_img_src_style[22:][:-2]
-                    print(img_src)
+                    #print(img_src)
                     video_start_btn.click()  # 点击开始播放视频
                     time.sleep(2)  # 等待视频窗口加载
                     video_window = self.driver.find_element_by_tag_name('video')  # 弹出视频窗口后，找到视频的标签
                     video_url = video_window.get_attribute('src')  # 从这个标签得到视频的原始URL
-                    print(video_url)
+                    #print(video_url)
 
                     if 'm3u8' in str(video_url):  # 当视频是m3u8格式的时候，直接跳过
                         return
