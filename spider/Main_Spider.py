@@ -351,9 +351,13 @@ spider = sina_spider()
 
 while True:
 
-    spider.update_video_url()
-    for k, value in spider.dic.items():
-        spider.get_weibo(value)
+    try:
+        spider.update_video_url()
+        for k, value in spider.dic.items():
+            spider.get_weibo(value)
+    except:
+        print('spider can not login')
+        pass
 
     Hoop_Latest_News()
     time.sleep(35)
