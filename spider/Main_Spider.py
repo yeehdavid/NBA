@@ -34,7 +34,7 @@ class sina_spider():
         self.driver.find_element_by_id('loginPassword').send_keys('wo344126509ni')
 
         self.driver.find_element_by_id('loginAction').click()
-
+        print('weibo spider start success')
         time.sleep(4)
 
     # 登录结束----------------------------------------------------------------------------------------------
