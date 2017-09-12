@@ -22,6 +22,9 @@ border:0;
 
 
 
+
+
+
 </style>
 
 <div class="container-fluid">
@@ -31,18 +34,23 @@ border:0;
 
             {% for article in article_list %}
             <div class="panel panel-default">
-                <div class="panel-body" >
-                    <pre id="{{forloop.counter}}" style="font-size:120%">{{article.title}}</pre>
+                <div class="panel-body">
+                    <pre id="{{forloop.counter}}" style="font-size:105%">{{article.title}}</pre>
                     {% ifequal article.video_url '0' %}
 
+                    {% ifequal article.img_count '1' %}
+
+                    <img src="{{article.img_src_1}}" class="img-rounded" height="100%" style="margin-left:12px;">
+
+
+                    {% endifequal %}
 
                     {% else %}
-
-                    <img onclick="video_modalfunction('{{article.video_url}}')" src="{{article.img_src_1}}"
-                         class="img-rounded" width="60%" style="margin-left:12px;" data-toggle="modal"
-                         data-target="#myModal">
-
-
+                    <div style="height:250px">
+                        <img onclick="video_modalfunction('{{article.video_url}}')" src="{{article.img_src_1}}"
+                             class="img-rounded" height="100%" style="margin-left:12px;" data-toggle="modal"
+                             data-target="#myModal">
+                    </div>
                     {% endifequal %}
 
                 </div>
@@ -118,6 +126,9 @@ border:0;
 
 
 
+
+
+
 </script>
 
 <script type="text/javascript">
@@ -149,6 +160,9 @@ window.onload=function(){
   show(i);
   }
 }
+
+
+
 
 
 
