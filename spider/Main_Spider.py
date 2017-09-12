@@ -148,8 +148,11 @@ class sina_spider():
 
         for l in L:
             try:
+
+                #print(selenium_get_bsobj(l[0]))
+                new_video_url = self.get_a_video_url(l[0])
                 cur.execute("UPDATE MainAPP_zimeiti_article SET video_url=%s WHERE url=%s",
-                            (self.get_a_video_url(l[0]), l[0]))
+                            (new_video_url, l[0]))
                 cur.connection.commit()
             except Exception as e:
                 # cur.execute("DELETE * FROM MainAPP_zimeiti_article WHERE url=%s")
