@@ -29,7 +29,7 @@ border:0;
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2"></div>
-        <div class="col-md-8">
+        <div class="col-md-6">
 
             {% for article in article_list %}
             <div class="panel panel-default">
@@ -56,25 +56,25 @@ border:0;
             </div>
 
             {% endfor %}
-            <center>
+            <nav aria-label="...">
 
                 <ul class="pager">
                     {% if article_list.has_previous %}
-                    <li class="previous"><a href="?page={{article_list.previous_page_number}}">&larr; Newer</a></li>
+                    <li ><a href="?page={{article_list.previous_page_number}}">&larr; Newer</a></li>
                     {% else %}
-                    <li class="previous disabled"><a href="#">&larr; Newer</a></li>
+                    <li class="disabled"><a href="#">&larr; Newer</a></li>
                     {% endif %}
                     {% if article_list.has_next %}
-                    <li class="next"><a href="?page={{article_list.next_page_number}}">Older &rarr;</a></li>
+                    <li ><a href="?page={{article_list.next_page_number}}">Older &rarr;</a></li>
                     {% else %}
-                    <li class="next disabled"><a href="#">Older &rarr;</a></li>
+                    <li class="disabled"><a href="#">Older &rarr;</a></li>
                     {% endif %}
                 </ul>
 
-            </center>
+            </nav>
 
         </div>
-        <div class="col-md-2"></div>
+        <div class="col-md-4"></div>
     </div>
 </div>
 <!-- 模态框（Modal） -->

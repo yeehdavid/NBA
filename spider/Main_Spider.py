@@ -139,7 +139,7 @@ class sina_spider():
             video_url = video_window.get_attribute('src')  # 从这个标签得到视频的原始URL
             return video_url
         except:
-            return
+            return False
 
     def update_video_url(self):
 
@@ -148,9 +148,13 @@ class sina_spider():
 
         for l in L:
             try:
-
+                print(l[0])
                 #print(selenium_get_bsobj(l[0]))
                 new_video_url = self.get_a_video_url(l[0])
+                if new_video_url == False:
+                    print('can not open :',l[0])
+
+                    continue
                 cur.execute("UPDATE MainAPP_zimeiti_article SET video_url=%s WHERE url=%s",
                             (new_video_url, l[0]))
                 cur.connection.commit()
@@ -352,18 +356,25 @@ def jrs_zhibo():
 
 
 # ----------------------------------------------------------------------------------------------
-spider = sina_spider()
+
 
 while True:
 
+
     try:
+        spider = sina_spider()
         spider.update_video_url()
         for k, value in spider.dic.items():
             print('try:',value)
             spider.get_weibo(value)
-    except:
+        spider.driver.quit()
+    except Exception as e:
         print('spider can not login')
+        print(e)
         pass
+
+
+    time.sleep(20)
 
     Hoop_Latest_News()
     time.sleep(35)
