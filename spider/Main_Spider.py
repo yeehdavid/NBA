@@ -80,7 +80,7 @@ class sina_spider():
                         img_count += 1
                     #--------------------------------------------------
                     user_img = spider.driver.find_element_by_tag_name('img').get_attribute('src')
-                    user_name = spider.driver.find_elements_by_class_name('m-text-cut')[1].text
+                    user_name = spider.driver.find_elements_by_class_name('m-text-cut')[0].text
                     #--------------------------------------------------
                     cur.execute(
                         "INSERT INTO MainAPP_zimeiti_article (title,created_time,url,video_url,img_src_1,img_src_2,img_src_3,img_src_4,img_src_5,img_src_6,img_src_7,img_src_8,img_src_9,img_count,user_img,user_name) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
@@ -99,7 +99,7 @@ class sina_spider():
                     title_text = title.text
                     # --------------------------------------------------
                     user_img = spider.driver.find_element_by_tag_name('img').get_attribute('src')
-                    user_name = spider.driver.find_elements_by_class_name('m-text-cut')[1].text
+                    user_name = spider.driver.find_elements_by_class_name('m-text-cut')[0].text
                     # --------------------------------------------------
                     url = self.driver.current_url
 
