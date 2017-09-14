@@ -102,6 +102,9 @@ class ZiMeiTi_Article(models.Model):
     url = models.CharField(max_length=200, blank=True)
     created_time = models.DateTimeField(default=datetime.datetime.now)
 
+    user_img = models.CharField(max_length=200, blank=True)
+    user_name = models.CharField(max_length=200, blank=True)
+
     video_url = models.CharField(max_length=200, default=0)
 
     img_src_1 = models.CharField(max_length=200, blank=True)

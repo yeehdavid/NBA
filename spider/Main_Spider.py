@@ -16,7 +16,7 @@ class sina_spider():
     # 开始登录----------------------------------------------------------------------------------------------
     def __init__(self):
         self.dic = {'lanqiudatu': 2432009827, 'lanqiujiqiaojiaoxue': 2494935602, 'hupulanqiu': 1642292081,
-                    'lanqiujiaoxueluntan': 2357832895,
+                    'lanqiujiaoxueluntan': 2357832895,'lantianxia':1901333207,
                     'zhibobalanqiu': 3171897472,
                     'lanqiudalishi': 2302617634, 'zhiguanyulanqiu': 5508233899, 'weiguanlanqiu': 5635855696}
         self.driver = webdriver.PhantomJS(executable_path='/home/david/phantomjs-2.1.1-linux-x86_64/bin/phantomjs')
@@ -76,14 +76,17 @@ class sina_spider():
                     img_src_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
                     img_count = 0
                     for img in media.find_elements_by_tag_name('img'):
-                        #print(img.get_attribute('src'))
                         img_src_list[img_count] = img.get_attribute('src')
                         img_count += 1
+                    #--------------------------------------------------
+                    user_img = spider.driver.find_element_by_tag_name('img').get_attribute('src')
+                    user_name = spider.driver.find_elements_by_class_name('m-text-cut')[1].text
+                    #--------------------------------------------------
                     cur.execute(
-                        "INSERT INTO MainAPP_zimeiti_article (title,created_time,url,video_url,img_src_1,img_src_2,img_src_3,img_src_4,img_src_5,img_src_6,img_src_7,img_src_8,img_src_9,img_count) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        "INSERT INTO MainAPP_zimeiti_article (title,created_time,url,video_url,img_src_1,img_src_2,img_src_3,img_src_4,img_src_5,img_src_6,img_src_7,img_src_8,img_src_9,img_count,user_img,user_name) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                         (title_text, datetime.datetime.now(), 0, 0, img_src_list[0], img_src_list[1], img_src_list[2],
                          img_src_list[3], img_src_list[4], img_src_list[5], img_src_list[6], img_src_list[7],
-                         img_src_list[8], img_count))  # 将这场比赛插入到数据库当中
+                         img_src_list[8], img_count,user_img,user_name))  # 将这场比赛插入到数据库当中
                     cur.connection.commit()
 
                     time.sleep(3)
@@ -94,7 +97,10 @@ class sina_spider():
 
                     title = self.driver.find_element_by_class_name('weibo-text')
                     title_text = title.text
-
+                    # --------------------------------------------------
+                    user_img = spider.driver.find_element_by_tag_name('img').get_attribute('src')
+                    user_name = spider.driver.find_elements_by_class_name('m-text-cut')[1].text
+                    # --------------------------------------------------
                     url = self.driver.current_url
 
                     video_start_btn = self.driver.find_element_by_class_name('f-bg-img')  # 找到开始播放视频的按钮
@@ -115,11 +121,11 @@ class sina_spider():
                     img_count = 1
 
                     cur.execute(
-                        "INSERT INTO MainAPP_zimeiti_article (title,created_time,url,video_url,img_src_1,img_src_2,img_src_3,img_src_4,img_src_5,img_src_6,img_src_7,img_src_8,img_src_9,img_count) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        "INSERT INTO MainAPP_zimeiti_article (title,created_time,url,video_url,img_src_1,img_src_2,img_src_3,img_src_4,img_src_5,img_src_6,img_src_7,img_src_8,img_src_9,img_count,user_img,user_name) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                         (title_text, datetime.datetime.now(), url, video_url, img_src_list[0], img_src_list[1],
                          img_src_list[2],
                          img_src_list[3], img_src_list[4], img_src_list[5], img_src_list[6], img_src_list[7],
-                         img_src_list[8], img_count))  # 将这场比赛插入到数据库当中
+                         img_src_list[8], img_count,user_img,user_name))  # 将这场比赛插入到数据库当中
                     cur.connection.commit()
 
         except Exception as e0:
@@ -130,7 +136,11 @@ class sina_spider():
             self.driver.get(url)
 
             time.sleep(5)
-
+            title = self.driver.find_element_by_tag_name('title').text
+            if '出错啦' in str(title):
+                cur.execute("DELETE FROM MainAPP_zimeiti_article WHERE url=%s",url)
+                cur.connection.commit()
+                return False
             video_start_btn = self.driver.find_element_by_class_name('f-bg-img')  # 找到开始播放视频的按钮
 
             video_start_btn.click()  # 点击开始播放视频

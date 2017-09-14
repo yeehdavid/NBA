@@ -18,6 +18,41 @@ border:0;
 
 
 
+.keleyiImgBox img {
+display: block;
+}
+
+.keleyiImgBox li {
+position: relative;
+list-style-type: none;
+border: 0px solid #ccc;
+padding: 0px;
+float: left;
+}
+
+.keleyitoolbar {
+position: absolute;
+bottom: 15px;
+left: -10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -26,29 +61,61 @@ border:0;
 
 </style>
 
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-6">
-
             {% for article in article_list %}
+
             <div class="panel panel-default">
+
                 <div class="panel-body">
+                    <img src="{{article.user_img}}" width="50" height="50" class="img-circle" style="margin-left:10px;">
+                    <h4 style="display:inline;margin-top:20px;">{{article.user_name}}</h4>
+
+
                     <pre id="{{forloop.counter}}" style="font-size:105%">{{article.title}}</pre>
                     {% ifequal article.video_url '0' %}
 
                     {% ifequal article.img_count '1' %}
+                    <img src="{{article.img_src_1}}" class="img-rounded" width="60%" style="margin-left:12px;">
+                    {% endifequal %}
 
-                        <img src="{{article.img_src_1}}" class="img-rounded" width="60%" style="margin-left:12px;">
+                    {% ifequal article.img_count '2' %}
+                    <img src="{{article.img_src_1}}" class="img-rounded" width="40%" style="margin-left:12px;">
+                    <img src="{{article.img_src_1}}" class="img-rounded" width="40%" style="margin-left:12px;">
+                    {% endifequal %}
 
+                    {% ifequal article.img_count '3' %}
+                    <img src="{{article.img_src_1}}" class="img-rounded" width="30%" style="margin-left:12px;">
+                    <img src="{{article.img_src_1}}" class="img-rounded" width="30%" style="margin-left:12px;">
+                    <img src="{{article.img_src_1}}" class="img-rounded" width="30%" style="margin-left:12px;">
+                    {% endifequal %}
 
+                    {% ifequal article.img_count '4' %}
+                    <img src="{{article.img_src_1}}" class="img-rounded" width="30%" style="margin-left:12px;">
+                    <img src="{{article.img_src_1}}" class="img-rounded" width="30%" style="margin-left:12px;">
+                    <img src="{{article.img_src_1}}" class="img-rounded" width="30%" style="margin-left:12px;">
+                    <img src="{{article.img_src_1}}" class="img-rounded" width="30%" style="margin-left:12px;">
                     {% endifequal %}
 
                     {% else %}
 
-                    <img onclick="video_modalfunction('{{article.video_url}}')" src="{{article.img_src_1}}"
-                         class="img-rounded" width="60%" style="margin-left:12px;" data-toggle="modal"
-                         data-target="#myModal">
+                    <ul id="imgBox" class="keleyiImgBox">
+                        <li>
+                            <img onclick="video_modalfunction('{{article.video_url}}')"
+                                 src="{{article.img_src_1}}"
+                                 class="img-rounded" width="60%" style="margin-left:-28px;"
+                                 data-toggle="modal"
+                                 data-target="#myModal">
+                            <div class="keleyitoolbar">
+                                <img width="100%" src="http://keleyi.com/keleyi/phtml/divcss/24/hovertreeplay.png"
+                                     border="0">
+                            </div>
+                        </li>
+                    </ul>
+
 
                     {% endifequal %}
 
@@ -60,19 +127,18 @@ border:0;
 
                 <ul class="pager">
                     {% if article_list.has_previous %}
-                    <li ><a href="?page={{article_list.previous_page_number}}">&larr; Newer</a></li>
+                    <li><a href="?page={{article_list.previous_page_number}}">&larr; Newer</a></li>
                     {% else %}
                     <li class="disabled"><a href="#">&larr; Newer</a></li>
                     {% endif %}
                     {% if article_list.has_next %}
-                    <li ><a href="?page={{article_list.next_page_number}}">Older &rarr;</a></li>
+                    <li><a href="?page={{article_list.next_page_number}}">Older &rarr;</a></li>
                     {% else %}
                     <li class="disabled"><a href="#">Older &rarr;</a></li>
                     {% endif %}
                 </ul>
 
             </nav>
-
         </div>
         <div class="col-md-4"></div>
     </div>
@@ -83,6 +149,7 @@ border:0;
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <p id="modal-header-p"></p>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="modalfunction('')">
                     &times;
                 </button>
@@ -102,13 +169,10 @@ border:0;
 
 <script type="text/javascript">
 
-	function modalfunction(url)
-	{
-		document.getElementById('').src=url
-	}
 
 	function video_modalfunction(video_url)
 	{
+
 
         var FZ_VIDEO = new createVideo(
  		'video_box',	//容器的id
@@ -121,7 +185,33 @@ border:0;
  	$('#myModal').on('hidden.bs.modal', function() {
         FZ_VIDEO.overVideo();
     });
+
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -158,6 +248,22 @@ window.onload=function(){
   show(i);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
