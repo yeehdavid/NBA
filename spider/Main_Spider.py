@@ -154,10 +154,11 @@ class sina_spider():
     def update_video_url(self):
 
         cur.execute("SELECT url FROM MainAPP_zimeiti_article WHERE url<>'0' ORDER BY -id")
-        L = cur.fetchall()[0:100]
+        L = cur.fetchall()[0:30]
 
         for l in L:
             try:
+                time.sleep(10)
                 print(l[0])
                 #print(selenium_get_bsobj(l[0]))
                 new_video_url = self.get_a_video_url(l[0])
@@ -375,6 +376,7 @@ while True:
         spider = sina_spider()
         spider.update_video_url()
         for k, value in spider.dic.items():
+            time.sleep(20)
             print('try:',value)
             spider.get_weibo(value)
         spider.driver.quit()
@@ -387,11 +389,11 @@ while True:
     time.sleep(20)
 
     Hoop_Latest_News()
-    time.sleep(35)
+    time.sleep(25)
 
     NBA_Official_News()
-    time.sleep(35)
+    time.sleep(25)
 
     Videos_98()
-    time.sleep(35)
+    time.sleep(25)
     jrs_zhibo()
